@@ -1,4 +1,4 @@
--- MSP2_WING_TUNE_ADVISOR (0x5F18, read one axis) and MSP2_WING_TUNE_ADVISOR_CLEAR (0x5F19).
+-- MSP2_GRIPORA_TUNE_ADVISOR (0x5F18, read one axis) and MSP2_GRIPORA_TUNE_ADVISOR_CLEAR (0x5F19).
 -- One axis per request. Layout: see gripora-firmware src/main/msp/msp.c. Firmware without
 -- them answers with an error.
 --

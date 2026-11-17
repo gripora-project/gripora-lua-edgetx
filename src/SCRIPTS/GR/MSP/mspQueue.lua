@@ -16,12 +16,11 @@ function MspQueueController.new()
 end
 
 -- Called by background_init.lua once MSP_API_VERSION has answered, and with
--- nil on a reset. Version 3 of the framing (MSP/common.lua) is offered from
--- API 22.15. Snapshot 0.0.38 already reports 22.15 without having it
--- (gripora-firmware #251 came in 0.0.39); it refuses version 3 once, and
--- the link falls back to version 2.
+-- nil on a reset. Version 3 of the framing (MSP/common.lua, gripora-firmware
+-- #251) is offered from MSP API 33.0, which every supported firmware has. If
+-- the firmware refuses version 3, the link falls back to version 2.
 function MspQueueController:setFirmwareApi(major, minor)
-    local v3 = major ~= nil and minor ~= nil and (major > 22 or (major == 22 and minor >= 15))
+    local v3 = major ~= nil and minor ~= nil and major >= 33
     setFraming(v3 and 3 or 2)
 end
 

@@ -47,7 +47,7 @@ local function setServoConfiguration(servoIndex, servoConfig)
     gr.mspQueue:add(message)
 end
 
--- MSP2_WING_SERVO_NAMES (0x5F3A, firmware #286): a short name per servo, for
+-- MSP2_GRIPORA_SERVO_NAMES (0x5F3A, firmware #286): a short name per servo, for
 -- reference only. Reply: U8 servo count (24), U8 name length N (8), then N
 -- zero-padded ASCII bytes per servo. callback(param, names) gets names[i] for
 -- servo i (0-based), "" for one without a name, or nil on firmware without
@@ -55,7 +55,7 @@ end
 -- the Ethos suite or the CLI; these scripts only show them.
 local function getServoNames(callback, callbackParam)
     local message = {
-        command = 0x5F3A, -- MSP2_WING_SERVO_NAMES
+        command = 0x5F3A, -- MSP2_GRIPORA_SERVO_NAMES
         processReply = function(self, buf)
             local count = gr.mspHelper.readU8(buf) or 0
             local length = gr.mspHelper.readU8(buf) or 0

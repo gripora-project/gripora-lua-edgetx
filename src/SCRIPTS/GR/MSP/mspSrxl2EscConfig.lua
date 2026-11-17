@@ -1,4 +1,4 @@
--- MSP2_WING_SRXL2_ESC_CONFIG (0x5F35 read / 0x5F36 write): the SRXL2 ESC bus
+-- MSP2_GRIPORA_SRXL2_ESC_CONFIG (0x5F35 read / 0x5F36 write): the SRXL2 ESC bus
 -- settings (firmware pg/srxl2_esc.h). The read reply starts with a payload
 -- version byte; the write takes the same fields without it. The firmware
 -- reads them at boot, so a change needs the usual save and reboot.
@@ -23,7 +23,7 @@ end
 local function getSrxl2EscConfig(callback, callbackParam, data, errorCallback)
     data = data or getDefaults()
     local message = {
-        command = 0x5F35, -- MSP2_WING_SRXL2_ESC_CONFIG
+        command = 0x5F35, -- MSP2_GRIPORA_SRXL2_ESC_CONFIG
         processReply = function(self, buf)
             -- Payload version 1 is exactly 5 bytes; anything else is a layout
             -- this script does not know, so treat it like unsupported firmware.
@@ -49,7 +49,7 @@ end
 -- channel); the firmware rejects any other length.
 local function setSrxl2EscConfig(config)
     local message = {
-        command = 0x5F36, -- MSP2_WING_SET_SRXL2_ESC_CONFIG
+        command = 0x5F36, -- MSP2_GRIPORA_SET_SRXL2_ESC_CONFIG
         payload = {},
         simulatorResponse = {}
     }
