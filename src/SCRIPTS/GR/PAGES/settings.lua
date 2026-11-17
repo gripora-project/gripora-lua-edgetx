@@ -31,7 +31,7 @@ fields[11] = { t = "Mixer Inputs",           x = x + indent, y = incY(lineSpacin
 fields[12] = { t = "Mixer Rules",            x = x + indent, y = incY(lineSpacing), sp = x + sp }
 fields[13] = { t = "Gyro Filters",           x = x + indent, y = incY(lineSpacing), sp = x + sp }
 fields[14] = { t = "Accelerometer Trim",     x = x + indent, y = incY(lineSpacing), sp = x + sp }
-fields[15] = { t = "ABS",                    x = x + indent, y = incY(lineSpacing), sp = x + sp }
+fields[15] = { t = "Drive Aids",             x = x + indent, y = incY(lineSpacing), sp = x + sp }
 
 incY(lineSpacing * 0.5)
 labels[2] = { t = "Display Various Pages",   x = x, y = incY(lineSpacing) }

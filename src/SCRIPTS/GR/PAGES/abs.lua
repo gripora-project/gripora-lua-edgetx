@@ -20,6 +20,7 @@ fields[#fields + 1] = { t = "Current PID profile", x = x, y = incY(lineSpacing),
 
 -- Labels are kept short for 128 px screens. "Dyn" fields only act in the
 -- Dynamic mode; the corner fields add to the rate and hold with steering lock.
+labels[#labels + 1] = { t = "ABS",          x = x, y = incY(lineSpacing) }
 fields[#fields + 1] = { t = "Mode",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.abs_mode }
 fields[#fields + 1] = { t = "Trigger",      x = x, y = incY(lineSpacing), sp = x + sp, data = config.abs_trigger }
 fields[#fields + 1] = { t = "Rate",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.abs_freq }
@@ -30,11 +31,22 @@ fields[#fields + 1] = { t = "Dyn hold",     x = x, y = incY(lineSpacing), sp = x
 fields[#fields + 1] = { t = "Corner rate",  x = x, y = incY(lineSpacing), sp = x + sp, data = config.abs_corner_freq }
 fields[#fields + 1] = { t = "Corner hold",  x = x, y = incY(lineSpacing), sp = x + sp, data = config.abs_corner_hold }
 
+-- Traction control: forward throttle rises no faster than zero to full in
+-- the ramp time (set in 10 ms steps).
+labels[#labels + 1] = { t = "Traction",     x = x, y = incY(lineSpacing) }
+fields[#fields + 1] = { t = "Mode",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.tc_mode }
+fields[#fields + 1] = { t = "Ramp",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.tc_ramp_time }
+
 local function received(page, _)
+    -- Firmware without traction control: its two fields stay "---".
+    if config.tc_mode.value == nil then
+        fields[#fields].readOnly = true
+        fields[#fields - 1].readOnly = true
+    end
     gr.onPageReady(page)
 end
 
--- Firmware without drive aids answers with an MSP error: the ABS fields stay
+-- Firmware without drive aids answers with an MSP error: the fields stay
 -- "---" and the page cannot be saved. The profile switcher keeps working.
 local function unsupported(page)
     for i = 2, #fields do
@@ -55,7 +67,7 @@ return {
             gr.settingsSaved(true, false)
         end
     end,
-    title       = "ABS",
+    title       = "Drive Aids",
     labels      = labels,
     fields      = fields,
     profileSwitcher = profileSwitcher,

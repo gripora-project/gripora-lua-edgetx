@@ -1,8 +1,9 @@
 -- MSP2_GRIPORA_DRIVE_AIDS_CONFIG (0x5F3F read / 0x5F40 write): the drive aids
--- settings (firmware pg/drive_aids.h), ABS first. All fields are U8. Later
--- aids append fields to the reply, so only the first 9 bytes are read; the
--- write sends exactly these 9 and the firmware leaves the rest unchanged.
--- The firmware refuses the whole write if any value is out of range.
+-- settings of the current PID profile (firmware pg/drive_aids.h): 9 ABS U8s,
+-- then traction control (U8 mode, U16 ramp time ms). Older firmware replies
+-- with the 9 ABS bytes only; the TC values then stay nil and the write sends
+-- 9 bytes. Later aids append fields; only the known ones are read. The
+-- firmware refuses the whole write if any value is out of range.
 local function getDefaults()
     local defaults = {}
     defaults.abs_mode = { min = 0, max = 2, table = { [0] = "Off", "Static", "Dynamic" } }
@@ -14,6 +15,8 @@ local function getDefaults()
     defaults.abs_dyn_hold = { min = 0, max = 100, unit = gr.units.milliseconds }
     defaults.abs_corner_freq = { min = 0, max = 10, unit = gr.units.herz }
     defaults.abs_corner_hold = { min = 0, max = 100, unit = gr.units.milliseconds }
+    defaults.tc_mode = { min = 0, max = 1, table = { [0] = "Off", "Ramp" } }
+    defaults.tc_ramp_time = { min = 50, max = 2000, mult = 10, unit = gr.units.milliseconds }
     return defaults
 end
 
@@ -36,12 +39,16 @@ local function getDriveAidsConfig(callback, callbackParam, data, errorCallback)
             data.abs_dyn_hold.value = gr.mspHelper.readU8(buf)
             data.abs_corner_freq.value = gr.mspHelper.readU8(buf)
             data.abs_corner_hold.value = gr.mspHelper.readU8(buf)
+            if #buf >= 12 then
+                data.tc_mode.value = gr.mspHelper.readU8(buf)
+                data.tc_ramp_time.value = gr.mspHelper.readU16(buf)
+            end
             callback(callbackParam, data)
         end,
         errorHandler = function(self)
             if errorCallback then errorCallback(callbackParam) end
         end,
-        simulatorResponse = { 0, 10, 40, 20, 30, 15, 0, 0, 0 }
+        simulatorResponse = { 0, 10, 40, 20, 30, 15, 0, 0, 0, 0, 244, 1 }
     }
     gr.mspQueue:add(message)
 end
@@ -61,6 +68,10 @@ local function setDriveAidsConfig(config)
     gr.mspHelper.writeU8(message.payload, config.abs_dyn_hold.value)
     gr.mspHelper.writeU8(message.payload, config.abs_corner_freq.value)
     gr.mspHelper.writeU8(message.payload, config.abs_corner_hold.value)
+    if config.tc_mode.value then
+        gr.mspHelper.writeU8(message.payload, config.tc_mode.value)
+        gr.mspHelper.writeU16(message.payload, config.tc_ramp_time.value)
+    end
     gr.mspQueue:add(message)
 end
 
