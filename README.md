@@ -13,8 +13,7 @@ adjustment did, and see telemetry and flight statistics in widgets. Gripora is o
 flight controller firmware for fixed-wing aircraft.
 
 **[Documentation](https://doc.gripora.org)** ·
-**[Releases](https://github.com/gripora-project/gripora-lua-edgetx/releases)** ·
-**[Discord](https://discord.gg/aEyyAJTXRw)**
+**[Releases](https://github.com/gripora-project/gripora-lua-edgetx/releases)**
 
 For FrSky Ethos radios, use the [Gripora Lua suite for Ethos](https://github.com/gripora-project/gripora-lua-ethos-suite).
 
@@ -120,7 +119,6 @@ The *Adjustment Teller* can be enabled under Settings > Grbg Options > Adjustmen
 Gripora is a community project. You can help by:
 
 * testing new versions and [reporting bugs](https://github.com/gripora-project/gripora-lua-edgetx/issues)
-* helping other pilots on [Discord](https://discord.gg/aEyyAJTXRw)
 * translating the scripts, or keeping a translation up to date
 * fixing bugs and adding features
 
