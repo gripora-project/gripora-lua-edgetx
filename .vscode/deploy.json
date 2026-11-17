@@ -1,5 +1,5 @@
 {
-    "tgt_name": "WF",
+    "tgt_name": "GR",
     "sdcard_marker_folders": ["SCRIPTS", "MODELS", "RADIO", "THEMES", "SOUNDS"],
     "sdcard_marker_min_matches": 2,
     "manual_drive_path": null,

@@ -157,7 +157,7 @@ class SingleInstance:
 
 def lock_name_for_repo():
     key = hashlib.md5(str(REPO_ROOT).encode("utf-8")).hexdigest()[:8]
-    return f"wf-deploy-{key}.lock"
+    return f"gr-deploy-{key}.lock"
 
 
 # --- incremental mirror copy ---------------------------------------------------
@@ -260,7 +260,7 @@ def deploy_to(dest_root, force=False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Deploy WingFlight EdgeTX Lua scripts")
+    parser = argparse.ArgumentParser(description="Deploy Gripora EdgeTX Lua scripts")
     parser.add_argument("--radio", action="store_true", help="Deploy to a detected EdgeTX SD card / drive")
     parser.add_argument("--simulator", action="store_true", help="Deploy to the configured simulator SD folder")
     parser.add_argument("--drive", help="Deploy to an explicit drive/folder path (skips auto-detection)")

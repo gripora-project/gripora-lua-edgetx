@@ -7,29 +7,29 @@ print("Minimizing script memory usage...")
 
 local genericReplacements = {
     {
-        -- Replace wf.call with pcall. Comment out for debugging minimized scripts.
-        files = { "/SCRIPTS/WF/", "/WIDGETS/" },
-        match = "wf%.call",
-        replace = "wf%.call",
+        -- Replace gr.call with pcall. Comment out for debugging minimized scripts.
+        files = { "/SCRIPTS/GR/", "/WIDGETS/" },
+        match = "gr%.call",
+        replace = "gr%.call",
         replacement = "pcall"
     },
     {
         -- Remove debug info from release builds.
-        files = "/SCRIPTS/WF/COMPILE/compile.lua",
+        files = "/SCRIPTS/GR/COMPILE/compile.lua",
         match = "loadScript%(script, %'cd%'%)",
         replace = "loadScript%(script, %'cd%'%)",
         replacement = "loadScript(script, 'c')"
     },
     {
         -- Replace --[NIR with --[[ to comment out debug code that should not be in a release
-        files = { "/SCRIPTS/WF/", "/WIDGETS/" },
+        files = { "/SCRIPTS/GR/", "/WIDGETS/" },
         match = "--%[NIR",
         replace = "--%[NIR",
         replacement = "--[["
     },
     {
-        -- Remove id = "xxx" from the fields table in page files. This id is not used by the official WingFlight scripts.
-        files = "/SCRIPTS/WF/PAGES/",
+        -- Remove id = "xxx" from the fields table in page files. This id is not used by the official Gripora scripts.
+        files = "/SCRIPTS/GR/PAGES/",
         match = "^%s-fields%[",
         replace = ",%s-id = \"(.-)\"",
         replacement = ""
@@ -37,44 +37,44 @@ local genericReplacements = {
     {
         -- Remove 'name = "xxx", ' from the adjfunctions fields table in adj_teller.lua.
         -- Names are only used for debugging and are expensive.
-        files = "/SCRIPTS/WF/adj_teller.lua",
+        files = "/SCRIPTS/GR/adj_teller.lua",
         match = "name = \"(.-)\", ",
         replace = "name = \"(.-)\", ",
         replacement = ""
     },
     {
         -- Remove simulatorResponse = {...} from MSP APIs, since they are not used outside the simulator.
-        files = "/SCRIPTS/WF/MSP/",
+        files = "/SCRIPTS/GR/MSP/",
         match = "simulatorResponse = {(.-)}",
         replace = "simulatorResponse = {(.-)},?",
         replacement = ""
     },
     {
         -- large files (>10K)  can't sometimes be compiled on some b&w radios without making it smaller. This is done by removing all double spaces.
-        files = { "/SCRIPTS/WF/adj_teller.lua", "/SCRIPTS/WF/wftlm_sensors.lua", "/SCRIPTS/WF/MSP/mspEscAm32.lua" },
+        files = { "/SCRIPTS/GR/adj_teller.lua", "/SCRIPTS/GR/grtlm_sensors.lua", "/SCRIPTS/GR/MSP/mspEscAm32.lua" },
         match = "  ",
         replace = "  ",
         replacement = ""
     },
     {
         -- This is also done by replacing ' = ' with '='.
-        files = { "/SCRIPTS/WF/adj_teller.lua", "/SCRIPTS/WF/wftlm_sensors.lua", "/SCRIPTS/WF/MSP/mspEscAm32.lua" },
+        files = { "/SCRIPTS/GR/adj_teller.lua", "/SCRIPTS/GR/grtlm_sensors.lua", "/SCRIPTS/GR/MSP/mspEscAm32.lua" },
         match = " = ",
         replace = " = ",
         replacement = "="
     },
     {
         -- This is also done by removing comments.
-        files = { "/SCRIPTS/WF/adj_teller.lua", "/SCRIPTS/WF/wftlm_sensors.lua", "/SCRIPTS/WF/MSP/mspEscAm32.lua" },
+        files = { "/SCRIPTS/GR/adj_teller.lua", "/SCRIPTS/GR/grtlm_sensors.lua", "/SCRIPTS/GR/MSP/mspEscAm32.lua" },
         match = "%-%-.*",
         replace = "%-%-.*",
         replacement = ""
     },
     {
-        -- Remove 'wf.lcdNeedsInvalidate*' since it isn't used on EdgeTX/OpenTX
-        files = { "/SCRIPTS/WF/" },
-        match = "wf%.lcdNeedsInvalidate.*",
-        replace = "wf%.lcdNeedsInvalidate.*",
+        -- Remove 'gr.lcdNeedsInvalidate*' since it isn't used on EdgeTX/OpenTX
+        files = { "/SCRIPTS/GR/" },
+        match = "gr%.lcdNeedsInvalidate.*",
+        replace = "gr%.lcdNeedsInvalidate.*",
         replacement = ""
     },
 }
@@ -107,7 +107,7 @@ local function processFile(filename, genericReplacement)
 end
 
 local function processGenericReplacements()
-    local files = assert(loadfile("./SCRIPTS/WF/COMPILE/scripts.lua"))
+    local files = assert(loadfile("./SCRIPTS/GR/COMPILE/scripts.lua"))
     local i = 1
     while true do
         local script = files(i)
@@ -133,16 +133,16 @@ processGenericReplacements()
 
 local mspRcTuningReplacements = {
     files = {
-        "SCRIPTS/WF/MSP/mspRcTuning.lua",
-        "SCRIPTS/WF/MSP/RATES/ACTUAL.lua",
-        "SCRIPTS/WF/MSP/RATES/BETAFL.lua",
-        "SCRIPTS/WF/MSP/RATES/KISS.lua",
-        "SCRIPTS/WF/MSP/RATES/NONE.lua",
-        "SCRIPTS/WF/MSP/RATES/QUICK.lua",
-        "SCRIPTS/WF/MSP/RATES/RACEFL.lua",
-        "SCRIPTS/WF/MSP/RATES/WINGFL.lua",
-        "SCRIPTS/WF/PAGES/rates.lua",
-        "SCRIPTS/WF/PAGES/rate_dynamics.lua"
+        "SCRIPTS/GR/MSP/mspRcTuning.lua",
+        "SCRIPTS/GR/MSP/RATES/ACTUAL.lua",
+        "SCRIPTS/GR/MSP/RATES/BETAFL.lua",
+        "SCRIPTS/GR/MSP/RATES/KISS.lua",
+        "SCRIPTS/GR/MSP/RATES/NONE.lua",
+        "SCRIPTS/GR/MSP/RATES/QUICK.lua",
+        "SCRIPTS/GR/MSP/RATES/RACEFL.lua",
+        "SCRIPTS/GR/MSP/RATES/GRIPOR.lua",
+        "SCRIPTS/GR/PAGES/rates.lua",
+        "SCRIPTS/GR/PAGES/rate_dynamics.lua"
     },
 
     { ".roll_rcRates", "[0]" },
@@ -184,7 +184,7 @@ local mspRcTuningReplacements = {
 }
 
 local mspPidTuningReplacements = {
-    files = { "SCRIPTS/WF/MSP/mspPidTuning.lua", "SCRIPTS/WF/PAGES/profile_pids.lua" },
+    files = { "SCRIPTS/GR/MSP/mspPidTuning.lua", "SCRIPTS/GR/PAGES/profile_pids.lua" },
 
     { ".roll_p", "[0]" },
     { ".roll_i", "[1]" },
@@ -206,7 +206,7 @@ local mspPidTuningReplacements = {
 }
 
 local mspPidProfileReplacements = {
-    files = { "SCRIPTS/WF/MSP/mspPidProfile.lua", "SCRIPTS/WF/PAGES/profile_various.lua", "SCRIPTS/WF/PAGES/profile_pidcon.lua" },
+    files = { "SCRIPTS/GR/MSP/mspPidProfile.lua", "SCRIPTS/GR/PAGES/profile_various.lua", "SCRIPTS/GR/PAGES/profile_pidcon.lua" },
 
     { ".pid_mode", "[0]" },
     { ".iterm_decay_time_roll", "[1]" },
@@ -258,7 +258,7 @@ local mspPidProfileReplacements = {
 }
 
 local mspEscAm32Replacements = {
-    files = { "SCRIPTS/WF/MSP/mspEscAm32.lua", "SCRIPTS/WF/PAGES/esc_am32_form.lua" },
+    files = { "SCRIPTS/GR/MSP/mspEscAm32.lua", "SCRIPTS/GR/PAGES/esc_am32_form.lua" },
 
     { ".esc_signature", "[0]" },
     { ".esc_command", "[1]" },
@@ -314,7 +314,7 @@ local mspEscAm32Replacements = {
 }
 
 local mspEscBlheliSReplacements = {
-    files = { "SCRIPTS/WF/MSP/mspEscBlheliS.lua", "SCRIPTS/WF/PAGES/esc_blhelis_form.lua" },
+    files = { "SCRIPTS/GR/MSP/mspEscBlheliS.lua", "SCRIPTS/GR/PAGES/esc_blhelis_form.lua" },
 
     { ".esc_signature", "[0]" },
     { ".esc_command", "[1]" },
@@ -368,7 +368,7 @@ local mspEscBlheliSReplacements = {
 }
 
 local mspEscBluejayReplacements = {
-    files = { "SCRIPTS/WF/MSP/mspEscBluejay.lua", "SCRIPTS/WF/PAGES/esc_bluejay_form.lua" },
+    files = { "SCRIPTS/GR/MSP/mspEscBluejay.lua", "SCRIPTS/GR/PAGES/esc_bluejay_form.lua" },
 
 	{ ".esc_signature", "[0]" },
 	{ ".esc_command", "[1]" },
@@ -414,8 +414,8 @@ local mspEscBluejayReplacements = {
 	{ ".reserved_3c_3f", "[41]" },
 }
 
-local wftlm_sensorsReplacements = {
-    files = { "SCRIPTS/WF/wftlm_sensors.lua" },
+local grtlm_sensorsReplacements = {
+    files = { "SCRIPTS/GR/grtlm_sensors.lua" },
 
     { "sid=0x", "[0]=0x" },  -- sid becomes [0]
     { ", name=", ", " },     -- name becomes [1]
@@ -436,8 +436,8 @@ local wftlm_sensorsReplacements = {
     },
 }
 
-local wftlmReplacements = {
-    files = { "SCRIPTS/WF/wftlm.lua" },
+local grtlmReplacements = {
+    files = { "SCRIPTS/GR/grtlm.lua" },
 
     {
         "setTelemetryValue(sid, 0, 0, val, sensor.unit, sensor.prec, sensor.name)",
@@ -489,5 +489,5 @@ replace(mspPidProfileReplacements)
 replace(mspEscAm32Replacements)
 replace(mspEscBlheliSReplacements)
 replace(mspEscBluejayReplacements)
-replace(wftlm_sensorsReplacements)
-replace(wftlmReplacements)
+replace(grtlm_sensorsReplacements)
+replace(grtlmReplacements)

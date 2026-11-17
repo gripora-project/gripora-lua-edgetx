@@ -17,7 +17,7 @@ cd ${TARGET}
 lua ../bin/minimize.lua
 cd ..
 
-SCRIPTS=${TARGET}/SCRIPTS/WF/COMPILE/scripts.lua
+SCRIPTS=${TARGET}/SCRIPTS/GR/COMPILE/scripts.lua
 
 rm -f ${SCRIPTS}
 
