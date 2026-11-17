@@ -56,7 +56,7 @@ local function getDefaults()
     data.atthold_max_rate = { min = 0, max = 1800, unit = gr.units.degreesPerSecond }
     data.fw_spa_gain = { min = 25, max = 200, unit = gr.units.percentage }
     data.fw_spa_curve = { min = 0, max = 8 }
-    data.fw_spa_speed_max = { min = 10, max = 600, unit = "km/h" }
+    data.fw_spa_speed_max = { min = 10, max = 300, unit = "km/h" }
     data.angle_level_damping = { min = 0, max = 100, unit = gr.units.percentage }
     data.snap_relax_strength = { min = 0, max = 100, unit = gr.units.percentage }
     data.snap_relax_threshold = { min = 20, max = 100, unit = gr.units.percentage }
