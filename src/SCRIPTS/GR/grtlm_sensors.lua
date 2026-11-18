@@ -288,8 +288,11 @@ local sensorsById  =  {
     [91] = { sid = 0x1203, name = "ARMD", unit = UNIT_RAW, prec = 0, dec = decU32 },
     -- Rescue state
     [92] = { sid = 0x1204, name = "Resc", unit = UNIT_RAW, prec = 0, dec = decU8 },
-    -- Governor state
-    [93] = { sid = 0x1205, name = "Gov", unit = UNIT_RAW, prec = 0, dec = decU8 },
+    -- Drive status: bits 0-6 drive aids flags, 8 GYRO OFF, 9 DRIFT, 10 LAUNCH,
+    -- 11 DRIVE AIDS OFF, 12 reversing, 13 speed known
+    [93] = { sid = 0x1205, name = "DrvS", unit = UNIT_RAW, prec = 0, dec = decU16 },
+    -- Wheel speed (0.1 km/h, negative while reversing)
+    [94] = { sid = 0x1206, name = "Spd", unit = UNIT_KMH, prec = 1, dec = decS16 },
 
     -- Adjustment function
     [99] = { sid = 0x1220, name = "ADJ", unit = UNIT_RAW, prec = 0, dec = decAdjFunc },
