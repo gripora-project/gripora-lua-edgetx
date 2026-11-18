@@ -1,5 +1,5 @@
 -- MSP_PID_PROFILE / MSP_SET_PID_PROFILE: verified against Gripora msp.c.
--- 51-byte base, then 1 + 4 + 4 reserved bytes, API 22.10 GPS speed attenuation (4),
+-- 51-byte base, then 1 + 4 + 4 reserved bytes, API 22.10 speed attenuation (4),
 -- then 1 + 6 + 4 reserved bytes (75 in all). The reserved bytes held Angle mode, Trainer,
 -- Attitude Hold, Auto Hover, Cross-Axis Relax, Snap Relax and Prop Hang settings, which
 -- the firmware no longer has; they are read and written back unchanged. Only the length
