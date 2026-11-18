@@ -11,7 +11,8 @@ local currentAdjfuncValue
 if not gr then assert(loadScript("gr.lua"))() end
 
 local adjfunctions = {
-    -- see src/main/fc/rc_adjustments.h
+    -- see src/main/fc/rc_adjustments.h. Functions the firmware no longer has (heli yaw and
+    -- collective, rescue, leveling, governor, cross-coupling, precomp) are left out.
 
     -- rates
     id5 =  { name = "Pitch Rate", wavs = { "pitch", "rate" } },
@@ -38,14 +39,6 @@ local adjfunctions = {
     id24 = { name = "Steering D Gain", wavs = { "yaw", "d", "gain" } },
     id25 = { name = "Steering F Gain", wavs = { "yaw", "f", "gain" } },
 
-    id26 = { name = "Yaw CW Gain", wavs = { "yaw", "cw", "gain" } },
-    id27 = { name = "Yaw CCW Gain", wavs = { "yaw", "ccw", "gain" } },
-    id28 = { name = "Yaw Cyclic FF", wavs = { "yaw", "cyclic", "ff" } },
-    id29 = { name = "Yaw Coll FF", wavs = { "yaw", "collective", "ff" } },
-    id30 = { name = "Yaw Coll Dyn", wavs = { "yaw", "collective", "dyn" } },
-    id31 = { name = "Yaw Coll Decay", wavs = { "yaw", "collective", "decay" } },
-    id32 = { name = "Pitch Coll FF", wavs = { "pitch", "collective", "ff" } },
-
     -- gyro cutoffs
     id33 = { name = "Pitch Gyro Cutoff", wavs = { "pitch", "gyro", "cutoff" } },
     id34 = { name = "Roll Gyro Cutoff", wavs = { "roll", "gyro", "cutoff" } },
@@ -56,63 +49,24 @@ local adjfunctions = {
     id37 = { name = "Roll D-term Cutoff", wavs = { "roll", "dterm", "cutoff" } },
     id38 = { name = "Steer D-term Cutoff", wavs = { "yaw", "dterm", "cutoff" } },
 
-    -- rescue
-    id39 = { name = "Rescue Climb Coll", wavs = { "rescue", "climb", "collective" } },
-    id40 = { name = "Rescue Hover Coll", wavs = { "rescue", "hover", "collective" } },
-    id41 = { name = "Rescue Hover Alt", wavs = { "rescue", "hover", "alt" } },
-    id42 = { name = "Rescue Alt P Gain", wavs = { "rescue", "alt", "p", "gain" } },
-    id43 = { name = "Rescue Alt I Gain", wavs = { "rescue", "alt", "i", "gain" } },
-    id44 = { name = "Rescue Alt D Gain", wavs = { "rescue", "alt", "d", "gain" } },
-
-    -- leveling
-    id45 = { name = "Angle Level Gain", wavs = { "angle", "level", "gain" } },
-    id47 = { name = "Acro Trainer Gain", wavs = { "acro", "gain" } },
-
-    -- governor
-    id48 = { name = "Governor Gain", wavs = { "gov", "gain" } },
-    id49 = { name = "Governor P Gain", wavs = { "gov", "p", "gain" } },
-    id50 = { name = "Governor I Gain", wavs = { "gov", "i", "gain" } },
-    id51 = { name = "Governor D Gain", wavs = { "gov", "d", "gain" } },
-    id52 = { name = "Governor F Gain", wavs = { "gov", "f", "gain" } },
-    id53 = { name = "Governor TTA Gain", wavs = { "gov", "tta", "gain" } },
-    id54 = { name = "Governor Cyclic FF", wavs = { "gov", "cyclic", "ff" } },
-    id55 = { name = "Governor Coll FF", wavs = { "gov", "collective", "ff" } },
-
     -- boost gains
     id56 = { name = "Pitch B Gain", wavs = { "pitch", "b", "gain" } },
     id57 = { name = "Roll B Gain", wavs = { "roll", "b", "gain" } },
     id58 = { name = "Steering B Gain", wavs = { "yaw", "b", "gain" } },
 
-    -- offset gains
-    id59 = { name = "Pitch O Gain", wavs = { "pitch", "o", "gain" } },
-    id60 = { name = "Roll O Gain", wavs = { "roll", "o", "gain" } },
-
-    -- cross-coupling
-    id61 = { name = "Cross Coup Gain", wavs = { "crossc", "gain" } },
-    id62 = { name = "Cross Coup Ratio", wavs = { "crossc", "ratio" } },
-    id63 = { name = "Cross Coup Cutoff", wavs = { "crossc", "cutoff" } },
-
     -- accelerometer
     id64 = { name = "Accelerometer Pitch Trim", wavs = { "accpitchtrim" } },
     id65 = { name = "Accelerometer Roll Trim", wavs = { "accrolltrim" } },
-
-    -- Yaw Inertia precomp
-    id66 = { name = "Yaw Inertia Precomp Gain", wavs = { "ya-in-pr-ga" } },
-    id67 = { name = "Yaw Inertia Precomp Cutoff", wavs = { "ya-in-pr-cu" } },
 
     -- Setpoint boost
     id68 = { name = "Pitch Setpoint Boost Gain", wavs = { "pi-se-bo-ga" } },
     id69 = { name = "Roll Setpoint Boost Gain", wavs = { "ro-se-bo-ga" } },
     id70 = { name = "Steer Setpoint Boost Gain", wavs = { "ya-se-bo-ga" } },
-    id71 = { name = "Collective Setpoint Boost Gain", wavs = { "co-se-bo-ga" } },
 
     -- Steering dynamic deadband
     id72 = { name = "Steer Dynamic Ceiling Gain", wavs = { "ya-dy-ce-ga" } },
     id73 = { name = "Steer Dynamic Deadband Gain", wavs = { "ya-dy-de-ga" } },
     id74 = { name = "Steer Dynamic Deadband Filter", wavs = { "ya-dy-de-fi" } },
-
-    -- Precomp cutoff
-    id75 = { name = "Yaw Precomp Cutoff", wavs = { "ya-pr-cu" } },
 
     -- per-axis I-term decay time (0.01 s)
     id114 = { name = "Roll I-term Decay", wavs = { "roll", "i", "decay" } },
