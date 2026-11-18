@@ -26,8 +26,8 @@ local function buildProfileFields()
     labels[#labels + 1] = { t = "Throttle",                x = x,          y = incY(lineSpacing) }
     fields[#fields + 1] = { t = "Gain",                    x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.fw_tpa_gain }
     if pidProfile.has_fw_spa then
-        -- GPS speed attenuation: needs a GPS fix and a Speed curve below
-        labels[#labels + 1] = { t = "GPS Speed",           x = x,          y = incY(lineSpacing) }
+        -- Speed attenuation: wheel speed from motor RPM, or GPS speed; needs a Speed curve below
+        labels[#labels + 1] = { t = "Speed",               x = x,          y = incY(lineSpacing) }
         fields[#fields + 1] = { t = "Gain",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.fw_spa_gain }
     end
 
