@@ -19,15 +19,15 @@ fields[#fields + 1] = { t = "Current PID profile",     x = x,          y = incY(
 
 incY(lineSpacing * 0.25)
 labels[#labels + 1] = { t = "I-term Relax Level",      x = x,          y = incY(lineSpacing) }
-fields[#fields + 1] = { t = "Roll",                    x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_relax_level_roll }
-fields[#fields + 1] = { t = "Pitch",                   x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_relax_level_pitch }
-fields[#fields + 1] = { t = "Yaw",                     x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_relax_level_yaw }
+fields[#fields + 1] = { t = "Roll (unused)",           x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_relax_level_roll }
+fields[#fields + 1] = { t = "Pitch (unused)",          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_relax_level_pitch }
+fields[#fields + 1] = { t = "Steering",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_relax_level_yaw }
 labels[#labels + 1] = { t = "I-term Decay",            x = x,          y = incY(lineSpacing) }
 fields[#fields + 1] = { t = "Limit",                   x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.iterm_decay_limit }
 labels[#labels + 1] = { t = "Error Limit",             x = x,          y = incY(lineSpacing) }
-fields[#fields + 1] = { t = "Roll",                    x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_roll }
-fields[#fields + 1] = { t = "Pitch",                   x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_pitch }
-fields[#fields + 1] = { t = "Yaw",                     x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_yaw }
+fields[#fields + 1] = { t = "Roll (unused)",           x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_roll }
+fields[#fields + 1] = { t = "Pitch (unused)",          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_pitch }
+fields[#fields + 1] = { t = "Steering",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_yaw }
 labels[#labels + 1] = { t = "Attitude Hold",           x = x,          y = incY(lineSpacing) }
 fields[#fields + 1] = { t = "Gain",                    x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.atthold_gain }
 fields[#fields + 1] = { t = "Deadband",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.atthold_deadband }
@@ -37,13 +37,13 @@ incY(lineSpacing * 0.25)
 labels[#labels + 1] = { t = "PID Controller",          x = x,          y = incY(lineSpacing) }
 fields[#fields + 1] = { t = "R bandwidth",             x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.gyro_cutoff_roll }
 fields[#fields + 1] = { t = "P bandwidth",             x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.gyro_cutoff_pitch }
-fields[#fields + 1] = { t = "Y bandwidth",             x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.gyro_cutoff_yaw }
+fields[#fields + 1] = { t = "Steer bandwidth",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.gyro_cutoff_yaw }
 fields[#fields + 1] = { t = "R D-term cutoff",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.dterm_cutoff_roll }
 fields[#fields + 1] = { t = "P D-term cutoff",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.dterm_cutoff_pitch }
-fields[#fields + 1] = { t = "Y D-term cutoff",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.dterm_cutoff_yaw }
+fields[#fields + 1] = { t = "Steer D cutoff",          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.dterm_cutoff_yaw }
 fields[#fields + 1] = { t = "R B-term cutoff",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.bterm_cutoff_roll }
 fields[#fields + 1] = { t = "P B-term cutoff",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.bterm_cutoff_pitch }
-fields[#fields + 1] = { t = "Y B-term cutoff",         x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.bterm_cutoff_yaw }
+fields[#fields + 1] = { t = "Steer B cutoff",          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.bterm_cutoff_yaw }
 
 local function receivedPidProfile(page, _)
     gr.onPageReady(page)

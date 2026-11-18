@@ -46,7 +46,7 @@ y = tableStartY
 labels[#labels + 1] = { t = "",      x = x, y = incY(tableSpacing.header) }
 labels[#labels + 1] = { t = "Roll",  x = x, y = incY(tableSpacing.row) }
 labels[#labels + 1] = { t = "Pitch", x = x, y = incY(tableSpacing.row) }
-labels[#labels + 1] = { t = "Yaw",   x = x, y = incY(tableSpacing.row) }
+labels[#labels + 1] = { t = "Steer", x = x, y = incY(tableSpacing.row) }
 
 x = x + tableSpacing.col
 y = tableStartY

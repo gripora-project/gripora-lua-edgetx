@@ -27,7 +27,7 @@ local maxAcceleration = "Max acceleration"
 local setpointBoostGain = "Setp boost gain"
 local setpointBoostCutoff = "Setp boost cutoff"
 
-labels[#labels + 1] = { t = "Roll Dynamics",       x = x,          y = incY(lineSpacing) }
+labels[#labels + 1] = { t = "Roll Dynamics (unused)", x = x,          y = incY(lineSpacing) }
 fields[#fields + 1] = { t = responseTime,          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.roll_response_time }
 fields[#fields + 1] = { t = maxAcceleration,       x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.roll_accel_limit }
 if gr.apiVersion >= 22.04 then
@@ -35,7 +35,7 @@ if gr.apiVersion >= 22.04 then
     fields[#fields + 1] = { t = setpointBoostCutoff,   x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.roll_setpoint_boost_cutoff }
 end
 
-labels[#labels + 1] = { t = "Pitch Dynamics",      x = x,          y = incY(lineSpacing) }
+labels[#labels + 1] = { t = "Pitch Dynamics (unused)", x = x,          y = incY(lineSpacing) }
 fields[#fields + 1] = { t = responseTime,          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.pitch_response_time }
 fields[#fields + 1] = { t = maxAcceleration,       x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.pitch_accel_limit }
 if gr.apiVersion >= 22.04 then
@@ -43,7 +43,7 @@ if gr.apiVersion >= 22.04 then
     fields[#fields + 1] = { t = setpointBoostCutoff,   x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.pitch_setpoint_boost_cutoff }
 end
 
-labels[#labels + 1] = { t = "Yaw Dynamics",        x = x,          y = incY(lineSpacing) }
+labels[#labels + 1] = { t = "Steering Dynamics",   x = x,          y = incY(lineSpacing) }
 fields[#fields + 1] = { t = responseTime,          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.yaw_response_time }
 fields[#fields + 1] = { t = maxAcceleration,       x = x + indent, y = incY(lineSpacing), sp = x + sp, data = rcTuning.yaw_accel_limit }
 if gr.apiVersion >= 22.04 then

@@ -16,13 +16,13 @@ local adjfunctions = {
     -- rates
     id5 =  { name = "Pitch Rate", wavs = { "pitch", "rate" } },
     id6 =  { name = "Roll Rate", wavs = { "roll", "rate" } },
-    id7 =  { name = "Yaw Rate", wavs = { "yaw", "rate" } },
+    id7 =  { name = "Steering Rate", wavs = { "yaw", "rate" } },
     id8 =  { name = "Pitch RC Rate", wavs = { "pitch", "rc", "rate" } },
     id9 =  { name = "Roll RC Rate", wavs = { "roll", "rc", "rate" } },
-    id10 = { name = "Yaw RC Rate", wavs = { "yaw", "rc", "rate" } },
+    id10 = { name = "Steering RC Rate", wavs = { "yaw", "rc", "rate" } },
     id11 = { name = "Pitch RC Expo", wavs = { "pitch", "rc", "expo" } },
     id12 = { name = "Roll RC Expo", wavs = { "roll", "rc", "expo" } },
-    id13 = { name = "Yaw RC Expo", wavs = { "yaw", "rc", "expo" } },
+    id13 = { name = "Steering RC Expo", wavs = { "yaw", "rc", "expo" } },
 
     -- pids
     id14 = { name = "Pitch P Gain", wavs = { "pitch", "p", "gain" } },
@@ -33,10 +33,10 @@ local adjfunctions = {
     id19 = { name = "Roll I Gain", wavs = { "roll", "i", "gain" } },
     id20 = { name = "Roll D Gain", wavs = { "roll", "d", "gain" } },
     id21 = { name = "Roll F Gain", wavs = { "roll", "f", "gain" } },
-    id22 = { name = "Yaw P Gain", wavs = { "yaw", "p", "gain" } },
-    id23 = { name = "Yaw I Gain", wavs = { "yaw", "i", "gain" } },
-    id24 = { name = "Yaw D Gain", wavs = { "yaw", "d", "gain" } },
-    id25 = { name = "Yaw F Gain", wavs = { "yaw", "f", "gain" } },
+    id22 = { name = "Steering P Gain", wavs = { "yaw", "p", "gain" } },
+    id23 = { name = "Steering I Gain", wavs = { "yaw", "i", "gain" } },
+    id24 = { name = "Steering D Gain", wavs = { "yaw", "d", "gain" } },
+    id25 = { name = "Steering F Gain", wavs = { "yaw", "f", "gain" } },
 
     id26 = { name = "Yaw CW Gain", wavs = { "yaw", "cw", "gain" } },
     id27 = { name = "Yaw CCW Gain", wavs = { "yaw", "ccw", "gain" } },
@@ -49,12 +49,12 @@ local adjfunctions = {
     -- gyro cutoffs
     id33 = { name = "Pitch Gyro Cutoff", wavs = { "pitch", "gyro", "cutoff" } },
     id34 = { name = "Roll Gyro Cutoff", wavs = { "roll", "gyro", "cutoff" } },
-    id35 = { name = "Yaw Gyro Cutoff", wavs = { "yaw", "gyro", "cutoff" } },
+    id35 = { name = "Steering Gyro Cutoff", wavs = { "yaw", "gyro", "cutoff" } },
 
     -- dterm cutoffs
     id36 = { name = "Pitch D-term Cutoff", wavs = { "pitch", "dterm", "cutoff" } },
     id37 = { name = "Roll D-term Cutoff", wavs = { "roll", "dterm", "cutoff" } },
-    id38 = { name = "Yaw D-term Cutoff", wavs = { "yaw", "dterm", "cutoff" } },
+    id38 = { name = "Steer D-term Cutoff", wavs = { "yaw", "dterm", "cutoff" } },
 
     -- rescue
     id39 = { name = "Rescue Climb Coll", wavs = { "rescue", "climb", "collective" } },
@@ -81,7 +81,7 @@ local adjfunctions = {
     -- boost gains
     id56 = { name = "Pitch B Gain", wavs = { "pitch", "b", "gain" } },
     id57 = { name = "Roll B Gain", wavs = { "roll", "b", "gain" } },
-    id58 = { name = "Yaw B Gain", wavs = { "yaw", "b", "gain" } },
+    id58 = { name = "Steering B Gain", wavs = { "yaw", "b", "gain" } },
 
     -- offset gains
     id59 = { name = "Pitch O Gain", wavs = { "pitch", "o", "gain" } },
@@ -103,13 +103,13 @@ local adjfunctions = {
     -- Setpoint boost
     id68 = { name = "Pitch Setpoint Boost Gain", wavs = { "pi-se-bo-ga" } },
     id69 = { name = "Roll Setpoint Boost Gain", wavs = { "ro-se-bo-ga" } },
-    id70 = { name = "Yaw Setpoint Boost Gain", wavs = { "ya-se-bo-ga" } },
+    id70 = { name = "Steer Setpoint Boost Gain", wavs = { "ya-se-bo-ga" } },
     id71 = { name = "Collective Setpoint Boost Gain", wavs = { "co-se-bo-ga" } },
 
-    -- Yaw dynamic deadband
-    id72 = { name = "Yaw Dynamic Ceiling Gain", wavs = { "ya-dy-ce-ga" } },
-    id73 = { name = "Yaw Dynamic Deadband Gain", wavs = { "ya-dy-de-ga" } },
-    id74 = { name = "Yaw Dynamic Deadband Filter", wavs = { "ya-dy-de-fi" } },
+    -- Steering dynamic deadband
+    id72 = { name = "Steer Dynamic Ceiling Gain", wavs = { "ya-dy-ce-ga" } },
+    id73 = { name = "Steer Dynamic Deadband Gain", wavs = { "ya-dy-de-ga" } },
+    id74 = { name = "Steer Dynamic Deadband Filter", wavs = { "ya-dy-de-fi" } },
 
     -- Precomp cutoff
     id75 = { name = "Yaw Precomp Cutoff", wavs = { "ya-pr-cu" } },
@@ -117,12 +117,12 @@ local adjfunctions = {
     -- per-axis I-term decay time (0.01 s)
     id114 = { name = "Roll I-term Decay", wavs = { "roll", "i", "decay" } },
     id115 = { name = "Pitch I-term Decay", wavs = { "pitch", "i", "decay" } },
-    id116 = { name = "Yaw I-term Decay", wavs = { "yaw", "i", "decay" } },
+    id116 = { name = "Steering I-term Decay", wavs = { "yaw", "i", "decay" } },
 
     -- per-axis I-term Relax score (1-10)
     id120 = { name = "Roll I-term Relax", wavs = { "roll", "i", "cutoff" } },
     id121 = { name = "Pitch I-term Relax", wavs = { "pitch", "i", "cutoff" } },
-    id122 = { name = "Yaw I-term Relax", wavs = { "yaw", "i", "cutoff" } },
+    id122 = { name = "Steering I-term Relax", wavs = { "yaw", "i", "cutoff" } },
 }
 
 local function getTelemetryId(name)
