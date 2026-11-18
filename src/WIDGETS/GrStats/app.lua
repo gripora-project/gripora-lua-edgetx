@@ -1,7 +1,7 @@
 -- This GrStats widget demonstrates how to:
 -- * register a widget with GrTool using gr.registerWidget()
 -- * receive model state changes using onStateChanged()
--- * use MSP to retrieve data from the flight controller using gr.useApi()
+-- * use MSP to retrieve data from the controller using gr.useApi()
 
 local zone, options = ...
 
@@ -14,11 +14,11 @@ local totalFlights = nil
 local totalFlightTime = nil
 
 local function getTotalFlights()
-    return "Flights: " .. (totalFlights or "")
+    return "Runs: " .. (totalFlights or "")
 end
 
 local function getTotalTime()
-    return "Total flight time: " .. (totalFlightTime or "")
+    return "Total run time: " .. (totalFlightTime or "")
 end
 
 local function showWidget(widget)

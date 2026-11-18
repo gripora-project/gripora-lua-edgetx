@@ -7,10 +7,10 @@
 
 # Gripora Lua Scripts for EdgeTX
 
-These scripts configure a [Gripora](https://github.com/gripora-project/gripora-firmware) flight
-controller from an EdgeTX or OpenTX transmitter: change settings at the field, hear what an
-adjustment did, and see telemetry and flight statistics in widgets. Gripora is open-source
-flight controller firmware for fixed-wing aircraft.
+These scripts configure a [Gripora](https://github.com/gripora-project/gripora-firmware)
+controller from an EdgeTX or OpenTX transmitter: change settings at the track, hear what an
+adjustment did, and see telemetry and run statistics in widgets. Gripora is open-source
+stability-control firmware for RC cars.
 
 **[Documentation](https://doc.gripora.org)** ·
 **[Releases](https://github.com/gripora-project/gripora-lua-edgetx/releases)**
@@ -64,7 +64,7 @@ For more information, see the [Gripora documentation](https://doc.gripora.org).
 
 ## Background script
 The optional background script `grbg.lua` features *Real Time FC Clock synchronization*, the *Adjustment Teller* and *CRSF/ELRS custom telemetry*.
-- RTC synchronization will send the time of the transmitter to the flight controller. The script will beep if RTC synchronization has been completed. Blackbox logs and files created by the FC will now have the correct timestamp.
+- RTC synchronization will send the time of the transmitter to the controller. The script will beep if RTC synchronization has been completed. Blackbox logs and files created by the FC will now have the correct timestamp.
 - *CRSF/ELRS custom telemetry* enables all available Gripora telemetry sensors when using ELRS.
 - The *Adjustment Teller* will [tell you](https://www.youtube.com/watch?v=rbMiiWhzhqI) what adjustment you just made (the video shows the Rotorflight scripts). It supports all adjustments except profile adjustments.
 
@@ -77,7 +77,7 @@ There are two ways to run the background script:
 If you have a color radio running EdgeTX 2.11 or higher, then you can use the *GR Tool* widget. Running this widget has several benefits:
 - It will automatically show the name of the connected model.
 - *GR Tool* can also always display one sensor value of your liking. I like *Vcel* (cell voltage) to be displayed always, so I don't completely exhaust my batteries while tuning.
-- *GR Tool* defines an API that can also be used by other widgets, which makes programming Gripora widgets easier. The *GR Stats* widget for example uses the *GR Tool* API, and displays/updates flight statistics.
+- *GR Tool* defines an API that can also be used by other widgets, which makes programming Gripora widgets easier. The *GR Stats* widget for example uses the *GR Tool* API, and displays/updates run statistics.
 - You don't need to configure a function for running the background script anymore.
 
 In the image below you can see the *GR Tool* widget in the upper left part, while the *GR Stats* widget sits in the lower right part of the screen.

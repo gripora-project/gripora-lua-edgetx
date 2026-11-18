@@ -7,7 +7,7 @@ local inc = { x = function(val) x = x + val return x end, y = function(val) y = 
 local labels = {}
 local fields = {}
 
-labels[#labels + 1] = { t = "Make sure the craft is level", x = x, y = inc.y(lineSpacing) }
+labels[#labels + 1] = { t = "Make sure the car is level", x = x, y = inc.y(lineSpacing) }
 labels[#labels + 1] = { t = "and stable, then press",       x = x, y = inc.y(lineSpacing) }
 labels[#labels + 1] = { t = "[ENTER] to calibrate, or",     x = x, y = inc.y(lineSpacing) }
 labels[#labels + 1] = { t = "[EXIT] to cancel.",            x = x, y = inc.y(lineSpacing) }

@@ -37,7 +37,7 @@ local function buildForm(page)
                 if self.data.value == 0 then
                     flighStats.stats_min_armed_time_s.value = -1   -- stats disabled
                 else
-                    flighStats.stats_min_armed_time_s.value = 15   -- >= 15s armed counts as a flight
+                    flighStats.stats_min_armed_time_s.value = 15   -- >= 15s armed counts as a run
                 end
                 buildForm(page)
                 gr.onPageReady(page)
@@ -45,7 +45,7 @@ local function buildForm(page)
         }
 
         if flighStats.statsEnabled.value and flighStats.statsEnabled.value == 1 then
-            fields[#fields + 1] = { t = "Total flights",  x = x, y = incY(lineSpacing), sp = x + sp, data = flighStats.stats_total_flights, readOnly = true }
+            fields[#fields + 1] = { t = "Total runs",     x = x, y = incY(lineSpacing), sp = x + sp, data = flighStats.stats_total_flights, readOnly = true }
             local totalTime = gr.executeScript("F/formatSeconds")(flighStats.stats_total_time_s.value)
             fields[#fields + 1] = { t = "Total time",     x = x, y = incY(lineSpacing), sp = x + sp, data = { value = totalTime }, readOnly = true  }
 
