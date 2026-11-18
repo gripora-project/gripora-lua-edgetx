@@ -12,7 +12,9 @@ if not gr then assert(loadScript("gr.lua"))() end
 
 local adjfunctions = {
     -- see src/main/fc/rc_adjustments.h. Functions the firmware no longer has (heli yaw and
-    -- collective, rescue, leveling, governor, cross-coupling, precomp) are left out.
+    -- collective, rescue, leveling, governor, cross-coupling, precomp) are left out, and so are
+    -- the roll/pitch master gains and servo trims and the aircraft mixer roles (flap
+    -- compensation, differential thrust), which do nothing on a car.
 
     -- rates
     id5 =  { name = "Pitch Rate", wavs = { "pitch", "rate" } },
@@ -67,6 +69,11 @@ local adjfunctions = {
     id72 = { name = "Steer Dynamic Ceiling Gain", wavs = { "ya-dy-ce-ga" } },
     id73 = { name = "Steer Dynamic Deadband Gain", wavs = { "ya-dy-de-ga" } },
     id74 = { name = "Steer Dynamic Deadband Filter", wavs = { "ya-dy-de-fi" } },
+
+    -- No voice files for these yet: the teller says only the value.
+    id82 = { name = "Battery Profile", wavs = {} },
+    id86 = { name = "Steering Master Gain", wavs = {} },
+    id91 = { name = "Steering Servo Trim", wavs = {} },
 
     -- per-axis I-term decay time (0.01 s)
     id114 = { name = "Roll I-term Decay", wavs = { "roll", "i", "decay" } },
