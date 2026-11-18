@@ -13,11 +13,14 @@ local fields = {}
 local mixerConfig = gr.useApi("mspMixer").getDefaults()
 
 labels[#labels + 1] = { t = "Mixer",     x = x,          y = incY(lineSpacing) }
-fields[#fields + 1] = { t = "Airframe",  x = x + indent, y = incY(lineSpacing), sp = x + sp, data = mixerConfig.model_type }
+fields[#fields + 1] = { t = "Model type", x = x + indent, y = incY(lineSpacing), sp = x + sp, data = mixerConfig.model_type }
 
 incY(lineSpacing * 0.5)
-labels[#labels + 1] = { t = "Note: pick \"Custom\" to edit raw mixer inputs, rules and", x = x, y = incY(lineSpacing), bold = false }
-labels[#labels + 1] = { t = "curves directly via the Mixer Inputs / Mixer Rules pages.", x = x, y = incY(lineSpacing), bold = false }
+-- Short lines: they must fit 128 px wide screens.
+labels[#labels + 1] = { t = "Custom: edit the raw", x = x, y = incY(lineSpacing), bold = false }
+labels[#labels + 1] = { t = "mixer on the Mixer", x = x, y = incY(lineSpacing), bold = false }
+labels[#labels + 1] = { t = "Inputs and Mixer", x = x, y = incY(lineSpacing), bold = false }
+labels[#labels + 1] = { t = "Rules pages.", x = x, y = incY(lineSpacing), bold = false }
 
 local function receivedMixerConfig(page, _)
     gr.onPageReady(page)
