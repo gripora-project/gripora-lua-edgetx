@@ -13,7 +13,6 @@ addPage("showRateDynamics", "Rate Dynamics", "rate_dynamics", true)
 addPage("showPidGains", "PID Gains", "profile_pids", true)
 addPage("showPidController", "PID Controller", "profile_pidcon", true)
 addPage("showProfileVarious", "Profile - Various", "profile_various", true)
-addPage("showTuneAdvisor", "Tune Advisor", "tune_advisor", true)
 if gr.apiVersion >= 22.04 then
     addPage("showBattery", "Battery", "battery", true)
     addPage("showSmartFuel", "Smart Fuel", "smartfuel", true)
