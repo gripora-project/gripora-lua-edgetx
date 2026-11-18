@@ -231,8 +231,8 @@ local sensorsById  =  {
 
     -- Motor 1 speed after the gear ratio
     [60] = { sid = 0x10C0, name = "Mspd", unit = UNIT_RPMS, prec = 0, dec = decU16 },
-    -- Tailspeed
-    [61] = { sid = 0x10C1, name = "Tspd", unit = UNIT_RPMS, prec = 0, dec = decU16 },
+    -- Motor 2 speed after the gear ratio
+    [61] = { sid = 0x10C1, name = "M2sp", unit = UNIT_RPMS, prec = 0, dec = decU16 },
 
     -- Attitude (hires combined)
     [64] = { sid = 0x1100, name = "Attd", unit = UNIT_DEGREE, prec = 1, dec = decAttitude },
