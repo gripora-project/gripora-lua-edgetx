@@ -53,7 +53,7 @@ local function buildProfileFields()
     end
 
     incY(lineSpacing * 0.25)
-    labels[#labels + 1] = { t = "Drive Feel",              x = x,          y = incY(lineSpacing) }
+    labels[#labels + 1] = { t = "Driving Feel",              x = x,          y = incY(lineSpacing) }
     labels[#labels + 1] = { t = "Master Gain",             x = x + indent, y = incY(lineSpacing), bold = false }
     fields[#fields + 1] = { t = "Roll (unused)",           x = x + indent*2, y = incY(lineSpacing), sp = x + sp, data = pidProfile.master_gain_roll }
     fields[#fields + 1] = { t = "Pitch (unused)",          x = x + indent*2, y = incY(lineSpacing), sp = x + sp, data = pidProfile.master_gain_pitch }
@@ -67,7 +67,7 @@ local function buildProfileFields()
     fields[#fields + 1] = { t = "Pitch (unused)",          x = x + indent*2, y = incY(lineSpacing), sp = x + sp, data = pidProfile.bounceback_pitch }
     fields[#fields + 1] = { t = "Steering",                x = x + indent*2, y = incY(lineSpacing), sp = x + sp, data = pidProfile.bounceback_yaw }
 
-    -- Gain curves (advanced shaping), kept apart from Drive Feel
+    -- Gain curves (advanced shaping), kept apart from Driving Feel
     incY(lineSpacing * 0.25)
     labels[#labels + 1] = { t = "Gain Curves",             x = x,          y = incY(lineSpacing) }
     fields[#fields + 1] = { t = "Roll (unused)",           x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.gain_curve_roll }
