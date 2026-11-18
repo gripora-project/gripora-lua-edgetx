@@ -28,10 +28,6 @@ labels[#labels + 1] = { t = "Error Limit",             x = x,          y = incY(
 fields[#fields + 1] = { t = "Roll (unused)",           x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_roll }
 fields[#fields + 1] = { t = "Pitch (unused)",          x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_pitch }
 fields[#fields + 1] = { t = "Steering",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.error_limit_yaw }
-labels[#labels + 1] = { t = "Attitude Hold",           x = x,          y = incY(lineSpacing) }
-fields[#fields + 1] = { t = "Gain",                    x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.atthold_gain }
-fields[#fields + 1] = { t = "Deadband",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.atthold_deadband }
-fields[#fields + 1] = { t = "Max rate",                x = x + indent, y = incY(lineSpacing), sp = x + sp, data = pidProfile.atthold_max_rate }
 
 incY(lineSpacing * 0.25)
 labels[#labels + 1] = { t = "PID Controller",          x = x,          y = incY(lineSpacing) }

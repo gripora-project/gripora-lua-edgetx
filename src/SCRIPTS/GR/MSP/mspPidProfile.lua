@@ -1,14 +1,9 @@
 -- MSP_PID_PROFILE / MSP_SET_PID_PROFILE: verified against Gripora msp.c.
--- The 51-byte base is followed by 5 reserved bytes (1 + 4, Auto Hover until 22.11),
--- then API 22.4 axis limits (4), then API 22.10 GPS speed attenuation (4),
--- then API 22.13 Angle mode damping (1), then snap relax (6), then prop-hang relax (4).
--- Only write extensions received from the FC.
-local axisLimits = {
-    {key = "angle_roll_limit", shared = "angle_level_limit", max = 90},
-    {key = "angle_pitch_limit", shared = "angle_level_limit", max = 75},
-    {key = "trainer_roll_limit", shared = "trainer_angle_limit", max = 90},
-    {key = "trainer_pitch_limit", shared = "trainer_angle_limit", max = 75},
-}
+-- 51-byte base, then 1 + 4 + 4 reserved bytes, API 22.10 GPS speed attenuation (4),
+-- then 1 + 6 + 4 reserved bytes (75 in all). The reserved bytes held Angle mode, Trainer,
+-- Attitude Hold, Auto Hover, Cross-Axis Relax, Snap Relax and Prop Hang settings, which
+-- the firmware no longer has; they are read and written back unchanged. Only the length
+-- received from the FC is written.
 
 local function getDefaults()
     local data = {}
@@ -32,12 +27,6 @@ local function getDefaults()
     data.bounceback_roll = { min = 1, max = 10 }
     data.bounceback_pitch = { min = 1, max = 10 }
     data.bounceback_yaw = { min = 1, max = 10 }
-    data.angle_level_strength = { min = 0, max = 200 }
-    data.angle_level_limit = { min = 10, max = 90, unit = gr.units.degrees }
-    data.trainer_gain = { min = 25, max = 255 }
-    data.trainer_angle_limit = { min = 10, max = 80, unit = gr.units.degrees }
-    data.atthold_gain = { min = 0, max = 250 }
-    data.atthold_deadband = { min = 0, max = 100, unit = gr.units.percentage }
     data.bterm_cutoff_roll = { min = 0, max = 250, unit = gr.units.herz }
     data.bterm_cutoff_pitch = { min = 0, max = 250, unit = gr.units.herz }
     data.bterm_cutoff_yaw = { min = 0, max = 250, unit = gr.units.herz }
@@ -46,28 +35,12 @@ local function getDefaults()
     data.master_gain_roll = { min = 0, max = 200, unit = gr.units.percentage }
     data.master_gain_pitch = { min = 0, max = 200, unit = gr.units.percentage }
     data.master_gain_yaw = { min = 0, max = 200, unit = gr.units.percentage }
-    data.cross_axis_relax_strength = { min = 0, max = 100, unit = gr.units.percentage }
-    data.cross_axis_relax_level = { min = 10, max = 250 }
-    data.cross_axis_relax_cutoff = { min = 1, max = 100, unit = gr.units.herz }
-    data.cross_axis_relax_pitch_strength = { min = 0, max = 100, unit = gr.units.percentage }
     data.gain_curve_roll = { min = 0, max = 8 }
     data.gain_curve_pitch = { min = 0, max = 8 }
     data.gain_curve_yaw = { min = 0, max = 8 }
-    data.atthold_max_rate = { min = 0, max = 1800, unit = gr.units.degreesPerSecond }
     data.fw_spa_gain = { min = 25, max = 200, unit = gr.units.percentage }
     data.fw_spa_curve = { min = 0, max = 8 }
     data.fw_spa_speed_max = { min = 10, max = 300, unit = "km/h" }
-    data.angle_level_damping = { min = 0, max = 100, unit = gr.units.percentage }
-    data.snap_relax_strength = { min = 0, max = 100, unit = gr.units.percentage }
-    data.snap_relax_threshold = { min = 20, max = 100, unit = gr.units.percentage }
-    data.snap_relax_window = { min = 0, max = 1000, unit = "ms" }
-    data.snap_relax_hold = { min = 0, max = 1000, unit = "ms" }
-    data.prop_hang_strength = { min = 0, max = 100, unit = gr.units.percentage }
-    data.prop_hang_angle = { min = 5, max = 45, unit = gr.units.degrees }
-    data.prop_hang_fade = { min = 0, max = 2000, unit = "ms" }
-    for _, limit in ipairs(axisLimits) do
-        data[limit.key] = { min = 10, max = limit.max, unit = gr.units.degrees }
-    end
     return data
 end
 
@@ -76,6 +49,12 @@ local function getPidProfile(callback, callbackParam, data)
     local message = {
         command = 94, -- MSP_PID_PROFILE
         processReply = function(self, buf)
+            local reserved = {}
+            local function skip(n)
+                for _ = 1, n do reserved[#reserved + 1] = gr.mspHelper.readU8(buf) end
+            end
+            data.reserved = reserved
+            data.length = #buf
             data.pid_mode.value = gr.mspHelper.readU8(buf)
             data.iterm_decay_time_roll.value = gr.mspHelper.readU8(buf)
             data.iterm_decay_time_pitch.value = gr.mspHelper.readU8(buf)
@@ -96,14 +75,7 @@ local function getPidProfile(callback, callbackParam, data)
             data.bounceback_roll.value = gr.mspHelper.readU8(buf)
             data.bounceback_pitch.value = gr.mspHelper.readU8(buf)
             data.bounceback_yaw.value = gr.mspHelper.readU8(buf)
-            data.angle_level_strength.value = gr.mspHelper.readU8(buf)
-            data.angle_level_limit.value = gr.mspHelper.readU8(buf)
-            -- reserved, was Horizon level strength (removed in API 22.12)
-            gr.mspHelper.readU8(buf)
-            data.trainer_gain.value = gr.mspHelper.readU8(buf)
-            data.trainer_angle_limit.value = gr.mspHelper.readU8(buf)
-            data.atthold_gain.value = gr.mspHelper.readU8(buf)
-            data.atthold_deadband.value = gr.mspHelper.readU8(buf)
+            skip(7) -- was Angle mode strength/limit, Horizon, Trainer gain/limit, Attitude Hold gain/deadband
             data.bterm_cutoff_roll.value = gr.mspHelper.readU8(buf)
             data.bterm_cutoff_pitch.value = gr.mspHelper.readU8(buf)
             data.bterm_cutoff_yaw.value = gr.mspHelper.readU8(buf)
@@ -112,47 +84,16 @@ local function getPidProfile(callback, callbackParam, data)
             data.master_gain_roll.value = gr.mspHelper.readU16(buf)
             data.master_gain_pitch.value = gr.mspHelper.readU16(buf)
             data.master_gain_yaw.value = gr.mspHelper.readU16(buf)
-            -- reserved, was Auto Hover gain/max angle/max rate (removed in API 22.11)
-            gr.mspHelper.readU8(buf)
-            gr.mspHelper.readU8(buf)
-            gr.mspHelper.readU16(buf)
-            data.cross_axis_relax_strength.value = gr.mspHelper.readU8(buf)
-            data.cross_axis_relax_level.value = gr.mspHelper.readU8(buf)
-            data.cross_axis_relax_cutoff.value = gr.mspHelper.readU8(buf)
-            data.cross_axis_relax_pitch_strength.value = gr.mspHelper.readU8(buf)
+            skip(8) -- was Auto Hover gain/angle/rate (4), Cross-Axis Relax (4)
             data.gain_curve_roll.value = gr.mspHelper.readU8(buf)
             data.gain_curve_pitch.value = gr.mspHelper.readU8(buf)
             data.gain_curve_yaw.value = gr.mspHelper.readU8(buf)
-            data.atthold_max_rate.value = gr.mspHelper.readU16(buf)
-            data.has_roll_deadband = #buf >= 52
-            data.has_throttle_assist = #buf >= 56
-            data.has_axis_limits = #buf >= 60
+            skip(2) -- was Attitude Hold max rate
+            -- was Auto Hover roll deadband (1), throttle assist (4), Angle/Trainer axis limits (4)
+            if #buf >= 52 then skip(1) end
+            if #buf >= 56 then skip(4) end
+            if #buf >= 60 then skip(4) end
             data.has_fw_spa = #buf >= 64
-            data.has_level_damping = #buf >= 65
-            data.has_snap_relax = #buf >= 71
-            data.has_prop_hang = #buf >= 75
-            -- reserved, was Auto Hover roll deadband and throttle assist
-            if data.has_roll_deadband then
-                gr.mspHelper.readU8(buf)
-            end
-            if data.has_throttle_assist then
-                gr.mspHelper.readU8(buf)
-                gr.mspHelper.readU8(buf)
-                gr.mspHelper.readU16(buf)
-            end
-            for _, limit in ipairs(axisLimits) do
-                local field = data[limit.key]
-                field.value, field.raw, field.initial = nil, nil, nil
-                field.max = limit.max
-                if data.has_axis_limits then
-                    field.raw = gr.mspHelper.readU8(buf)
-                    -- Zero inherits the old shared limit. Preserve it on unrelated saves,
-                    -- including legacy pitch limits above the new explicit 75-degree cap.
-                    field.value = field.raw == 0 and data[limit.shared].value or field.raw
-                    field.initial = field.value
-                    field.max = math.max(limit.max, field.value)
-                end
-            end
             data.fw_spa_gain.value = nil
             data.fw_spa_curve.value = nil
             data.fw_spa_speed_max.value = nil
@@ -161,28 +102,10 @@ local function getPidProfile(callback, callbackParam, data)
                 data.fw_spa_curve.value = gr.mspHelper.readU8(buf)
                 data.fw_spa_speed_max.value = gr.mspHelper.readU16(buf)
             end
-            data.angle_level_damping.value = nil
-            if data.has_level_damping then
-                data.angle_level_damping.value = gr.mspHelper.readU8(buf)
-            end
-            data.snap_relax_strength.value = nil
-            data.snap_relax_threshold.value = nil
-            data.snap_relax_window.value = nil
-            data.snap_relax_hold.value = nil
-            if data.has_snap_relax then
-                data.snap_relax_strength.value = gr.mspHelper.readU8(buf)
-                data.snap_relax_threshold.value = gr.mspHelper.readU8(buf)
-                data.snap_relax_window.value = gr.mspHelper.readU16(buf)
-                data.snap_relax_hold.value = gr.mspHelper.readU16(buf)
-            end
-            data.prop_hang_strength.value = nil
-            data.prop_hang_angle.value = nil
-            data.prop_hang_fade.value = nil
-            if data.has_prop_hang then
-                data.prop_hang_strength.value = gr.mspHelper.readU8(buf)
-                data.prop_hang_angle.value = gr.mspHelper.readU8(buf)
-                data.prop_hang_fade.value = gr.mspHelper.readU16(buf)
-            end
+            -- was Angle mode damping (1), Snap Relax (6), Prop Hang (4)
+            if #buf >= 65 then skip(1) end
+            if #buf >= 71 then skip(6) end
+            if #buf >= 75 then skip(4) end
             callback(callbackParam, data)
         end,
         simulatorResponse = {
@@ -190,19 +113,15 @@ local function getPidProfile(callback, callbackParam, data)
             45, 45, 60,                     -- error limit
             50, 50, 100, 15, 15, 20,        -- gyro, D-term cutoffs
             22, 22, 22, 5, 5, 5,            -- I-term relax level, bounceback
-            40, 55, 0,                      -- angle strength, limit, reserved
-            75, 20, 40, 5,                  -- trainer gain, limit, atthold gain, deadband
+            0, 0, 0, 0, 0, 0, 0,            -- reserved
             15, 15, 20, 100, 0,             -- B-term cutoffs, TPA gain, curve
             100, 0, 100, 0, 100, 0,         -- master gains
+            0, 0, 0, 0, 0, 0, 0, 0,         -- reserved
+            0, 0, 0,                        -- gain curves
+            0, 0, 0, 0, 0, 0, 0,            -- reserved
             0, 0, 0, 0,                     -- reserved
-            0, 100, 10, 0,                  -- cross-axis relax
-            0, 0, 0, 44, 1,                 -- gain curves, atthold max rate
-            0, 0, 0, 0, 0,                  -- reserved
-            0, 0, 0, 0,                     -- axis limits (inherit)
             100, 0, 150, 0,                 -- SPA gain, curve, speed max
-            25,                             -- angle damping
-            100, 60, 144, 1, 94, 1,         -- snap relax strength, threshold, window, hold (350 ms)
-            100, 20, 244, 1                 -- prop-hang relax strength, angle, fade (500 ms)
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 -- reserved
         },
     }
     gr.mspQueue:add(message)
@@ -214,6 +133,14 @@ local function setPidProfile(data)
         payload = {},
         simulatorResponse = {}
     }
+    local reserved, r = data.reserved or {}, 0
+    local function keep(n)
+        for _ = 1, n do
+            r = r + 1
+            gr.mspHelper.writeU8(message.payload, reserved[r] or 0)
+        end
+    end
+    local length = data.length or 51
     gr.mspHelper.writeU8(message.payload, data.pid_mode.value)
     gr.mspHelper.writeU8(message.payload, data.iterm_decay_time_roll.value)
     gr.mspHelper.writeU8(message.payload, data.iterm_decay_time_pitch.value)
@@ -234,13 +161,7 @@ local function setPidProfile(data)
     gr.mspHelper.writeU8(message.payload, data.bounceback_roll.value)
     gr.mspHelper.writeU8(message.payload, data.bounceback_pitch.value)
     gr.mspHelper.writeU8(message.payload, data.bounceback_yaw.value)
-    gr.mspHelper.writeU8(message.payload, data.angle_level_strength.value)
-    gr.mspHelper.writeU8(message.payload, data.angle_level_limit.value)
-    gr.mspHelper.writeU8(message.payload, 0) -- reserved, was Horizon level strength
-    gr.mspHelper.writeU8(message.payload, data.trainer_gain.value)
-    gr.mspHelper.writeU8(message.payload, data.trainer_angle_limit.value)
-    gr.mspHelper.writeU8(message.payload, data.atthold_gain.value)
-    gr.mspHelper.writeU8(message.payload, data.atthold_deadband.value)
+    keep(7)
     gr.mspHelper.writeU8(message.payload, data.bterm_cutoff_roll.value)
     gr.mspHelper.writeU8(message.payload, data.bterm_cutoff_pitch.value)
     gr.mspHelper.writeU8(message.payload, data.bterm_cutoff_yaw.value)
@@ -249,52 +170,22 @@ local function setPidProfile(data)
     gr.mspHelper.writeU16(message.payload, data.master_gain_roll.value)
     gr.mspHelper.writeU16(message.payload, data.master_gain_pitch.value)
     gr.mspHelper.writeU16(message.payload, data.master_gain_yaw.value)
-    gr.mspHelper.writeU8(message.payload, 0)  -- reserved, was Auto Hover gain
-    gr.mspHelper.writeU8(message.payload, 0)  -- reserved, was Auto Hover max angle
-    gr.mspHelper.writeU16(message.payload, 0) -- reserved, was Auto Hover max rate
-    gr.mspHelper.writeU8(message.payload, data.cross_axis_relax_strength.value)
-    gr.mspHelper.writeU8(message.payload, data.cross_axis_relax_level.value)
-    gr.mspHelper.writeU8(message.payload, data.cross_axis_relax_cutoff.value)
-    gr.mspHelper.writeU8(message.payload, data.cross_axis_relax_pitch_strength.value)
+    keep(8)
     gr.mspHelper.writeU8(message.payload, data.gain_curve_roll.value)
     gr.mspHelper.writeU8(message.payload, data.gain_curve_pitch.value)
     gr.mspHelper.writeU8(message.payload, data.gain_curve_yaw.value)
-    gr.mspHelper.writeU16(message.payload, data.atthold_max_rate.value)
-    if data.has_roll_deadband then
-        gr.mspHelper.writeU8(message.payload, 0) -- reserved, was Auto Hover roll deadband
-    end
-    if data.has_throttle_assist then
-        -- reserved, was Auto Hover throttle assist gain/max/trigger
-        gr.mspHelper.writeU8(message.payload, 0)
-        gr.mspHelper.writeU8(message.payload, 0)
-        gr.mspHelper.writeU16(message.payload, 0)
-    end
-    if data.has_axis_limits then
-        for _, limit in ipairs(axisLimits) do
-            local field = data[limit.key]
-            local value = field.value == field.initial and field.raw or math.max(10, math.min(limit.max, field.value))
-            gr.mspHelper.writeU8(message.payload, value)
-        end
-    end
-    if data.has_axis_limits and data.has_fw_spa then
+    keep(2)
+    if length >= 52 then keep(1) end
+    if length >= 56 then keep(4) end
+    if length >= 60 then keep(4) end
+    if length >= 64 then
         gr.mspHelper.writeU8(message.payload, data.fw_spa_gain.value)
         gr.mspHelper.writeU8(message.payload, data.fw_spa_curve.value)
         gr.mspHelper.writeU16(message.payload, data.fw_spa_speed_max.value)
     end
-    if data.has_axis_limits and data.has_fw_spa and data.has_level_damping then
-        gr.mspHelper.writeU8(message.payload, data.angle_level_damping.value)
-    end
-    if data.has_axis_limits and data.has_fw_spa and data.has_level_damping and data.has_snap_relax then
-        gr.mspHelper.writeU8(message.payload, data.snap_relax_strength.value)
-        gr.mspHelper.writeU8(message.payload, data.snap_relax_threshold.value)
-        gr.mspHelper.writeU16(message.payload, data.snap_relax_window.value)
-        gr.mspHelper.writeU16(message.payload, data.snap_relax_hold.value)
-    end
-    if data.has_axis_limits and data.has_fw_spa and data.has_level_damping and data.has_snap_relax and data.has_prop_hang then
-        gr.mspHelper.writeU8(message.payload, data.prop_hang_strength.value)
-        gr.mspHelper.writeU8(message.payload, data.prop_hang_angle.value)
-        gr.mspHelper.writeU16(message.payload, data.prop_hang_fade.value)
-    end
+    if length >= 65 then keep(1) end
+    if length >= 71 then keep(6) end
+    if length >= 75 then keep(4) end
     gr.mspQueue:add(message)
 end
 
