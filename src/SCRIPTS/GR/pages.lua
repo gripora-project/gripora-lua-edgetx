@@ -25,6 +25,7 @@ addPage("showGyroFilters", "Gyro Filters", "filters", true)
 addPage("showAccelerometerTrim", "Accelerometer Trim", "accelerometer", true)
 addPage("showEscSensor", "ESC Sensor", "esc_sensor", true)
 addPage("showAbs", "Drive Aids", "abs", true)
+addPage("showDrift", "Drift", "drift", true)
 
 if gr.apiVersion >= 22.04 then
     addPage("showModelOnTx", "Model", "model", true)
