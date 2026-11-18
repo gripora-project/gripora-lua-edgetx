@@ -37,11 +37,23 @@ labels[#labels + 1] = { t = "Traction",     x = x, y = incY(lineSpacing) }
 fields[#fields + 1] = { t = "Mode",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.tc_mode }
 fields[#fields + 1] = { t = "Ramp",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.tc_ramp_time }
 
+-- Launch control: with Switch, the LAUNCH mode stages a launch; the first
+-- forward throttle starts at most the start throttle, rising to full in the
+-- ramp time (set in 10 ms steps).
+labels[#labels + 1] = { t = "Launch",       x = x, y = incY(lineSpacing) }
+fields[#fields + 1] = { t = "Mode",         x = x, y = incY(lineSpacing), sp = x + sp, data = config.lc_mode }
+fields[#fields + 1] = { t = "Start throttle", x = x, y = incY(lineSpacing), sp = x + sp, data = config.lc_throttle }
+fields[#fields + 1] = { t = "Ramp time",    x = x, y = incY(lineSpacing), sp = x + sp, data = config.lc_ramp_time }
+
 local function received(page, _)
-    -- Firmware without traction control: its two fields stay "---".
-    if config.tc_mode.value == nil then
-        fields[#fields].readOnly = true
-        fields[#fields - 1].readOnly = true
+    -- Firmware without traction or launch control: their fields stay "---".
+    for _, f in ipairs(fields) do
+        if (f.data == config.tc_mode or f.data == config.tc_ramp_time) and config.tc_mode.value == nil then
+            f.readOnly = true
+        end
+        if (f.data == config.lc_mode or f.data == config.lc_throttle or f.data == config.lc_ramp_time) and config.lc_mode.value == nil then
+            f.readOnly = true
+        end
     end
     gr.onPageReady(page)
 end
