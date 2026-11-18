@@ -31,9 +31,8 @@ end
 
 local function getDefaults()
     local defaults = {}
-    defaults.model_type = { min = 0, max = 5, table = {
-        [0] = "Regular Airplane", "Flying Wing", "V-Tail Airplane", "Delta Wing", "Rudder/Elevator Trainer", "Custom"
-    } }
+    -- MODEL_TYPE_* (pg/mixer.h)
+    defaults.model_type = { min = 0, max = 1, table = { [0] = "Car", "Custom" } }
     return defaults
 end
 
@@ -60,7 +59,7 @@ local function getMixerConfig(callback, callbackParam, data)
 end
 
 -- The PWM rate comes after the two bus channel counts, so they are sent back as read.
--- Without them (the reply was not read in full) only the airframe is written.
+-- Without them (the reply was not read in full) only the model type is written.
 local function setMixerConfig(data)
     local message = {
         command = 43, -- MSP_SET_MIXER_CONFIG
