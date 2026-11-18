@@ -229,8 +229,8 @@ local sensorsById  =  {
     -- Variometer (combined baro+GPS)
     [59] = { sid = 0x10B3, name = "Var", unit = UNIT_METERS_PER_SECOND, prec = 2, dec = decS16 },
 
-    -- Headspeed
-    [60] = { sid = 0x10C0, name = "Hspd", unit = UNIT_RPMS, prec = 0, dec = decU16 },
+    -- Motor 1 speed after the gear ratio
+    [60] = { sid = 0x10C0, name = "Mspd", unit = UNIT_RPMS, prec = 0, dec = decU16 },
     -- Tailspeed
     [61] = { sid = 0x10C1, name = "Tspd", unit = UNIT_RPMS, prec = 0, dec = decU16 },
 
